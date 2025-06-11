@@ -1,4 +1,4 @@
-from protgraph.ft_execution import _get_qualifiers, get_content
+from protgraph.ft_execution import _get_qualifiers, get_content, get_isoforms
 from protgraph.unexpected_exception import UnexpectedException
 
 
@@ -75,6 +75,7 @@ def _append_edge_list_chain(
 ):
     # Get to be replaced amino_acids
     y_s = get_content(text, beginning, delimiter)
+    affected_isoforms = get_isoforms(text)
 
     # Generalizing: It can reference multiple substitutions
     for y in y_s.split(","):
@@ -109,7 +110,7 @@ def _append_edge_list_chain(
             for aa_in in aa_in_list:
                 for aa_edge_in in list(graph.es.select(_target=aa_in)):  # Get all incoming edges
                     qualifiers = [*_get_qualifiers(aa_edge_in), generic_feature]
-                    isoforms = aa_edge_in["isoforms"] if "isoforms" in aa_edge_in.attributes() else None
+                    isoforms = affected_isoforms
 
                     # Include all desired edge attributes in a dict (or list, depending on your later use)
                     edge_attrs = {"qualifiers": qualifiers, "isoforms": isoforms}
@@ -118,7 +119,7 @@ def _append_edge_list_chain(
             for aa_out in aa_out_list:
                 for aa_edge_out in list(graph.es.select(_source=aa_out)):  # Get all outgoing edges
                     qualifiers = _get_qualifiers(aa_edge_out)
-                    isoforms = aa_edge_out["isoforms"] if "isoforms" in aa_edge_out.attributes() else None
+                    isoforms = affected_isoforms
 
                     edge_attrs = {"qualifiers": qualifiers, "isoforms": isoforms}
                     edge_list.append(((last_node, aa_edge_out.target), edge_attrs))
