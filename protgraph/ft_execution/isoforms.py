@@ -1,5 +1,6 @@
 from protgraph.ft_execution import _get_qualifiers, get_content, get_isoforms
 from protgraph.unexpected_exception import UnexpectedException
+from igraph import IN, OUT
 
 
 def execute_isoform(graph, generic_feature, beginning="("):
@@ -19,8 +20,28 @@ def execute_isoform(graph, generic_feature, beginning="("):
     if vertices_after is None:
         return
 
-    # Now we check if we skip or add nodes
+    print("liste?",vertices_after)
+    print("hallo", vertices_after[0], type(vertices_after[0]))
+
     text = generic_feature.qualifiers["note"]
+    affected_isoforms = get_isoforms(text)
+
+    # Remove isoforms that don't belong to the current edges from their edge attributes
+    flat_vertices_after = [item[0] for item in vertices_after]
+    flat_vertices_before = [item[0] for item in vertices_before]
+    current_vertices = flat_vertices_before
+    while True:
+        update_edge_isoforms(graph, current_vertices, affected_isoforms, IN)
+        if current_vertices == flat_vertices_after: break
+        next_positions = [v["position"] + 1 for v in current_vertices if "position" in v.attributes()]
+        current_vertices = list(graph.vs.select(position_in=next_positions))
+
+    # ...- X               X is node from isoform, A & B are canonical sequence
+    #        \ 
+    # ...- A - B           Finished all edges upto a, now only edge a - b is left.
+    update_edge_isoforms(graph, flat_vertices_after, affected_isoforms, OUT)
+
+    # Now we check if we skip or add nodes
     edge_list = []  # Here we append all edges, which should be added at the end
     if text.lower().startswith("missing"):
         _append_edge_list_missing(
@@ -49,6 +70,22 @@ def execute_isoform(graph, generic_feature, beginning="("):
     graph.es[cur_edges:]["qualifiers"] = qualifiers_vals
     graph.es[cur_edges:]["isoforms"] = isoforms_vals
 
+def update_edge_isoforms(graph, vertices, affected_isoforms, mode):
+    for v in vertices:
+        incoming_edges = graph.incident(v, mode=mode)
+        for edge_id in incoming_edges:
+            edge = graph.es[edge_id]
+            current_isoforms = edge["isoforms"]
+
+            new_isoforms = transform_isoforms(current_isoforms, affected_isoforms)
+            edge["isoforms"] = new_isoforms
+
+def transform_isoforms(current_value, affected_isoforms):
+    for isoform in affected_isoforms:
+        current_value = current_value.replace(isoform, "")
+    
+    return current_value
+
 def _get_vertices_before_after(graph, generic_feature):
     """ TODO DESC """
     # Get start and end position first
@@ -76,7 +113,8 @@ def _append_edge_list_chain(
     # Get to be replaced amino_acids
     y_s = get_content(text, beginning, delimiter)
     affected_isoforms = get_isoforms(text)
-
+    affected_isoforms = "".join(affected_isoforms)
+    affected_isoforms = affected_isoforms.replace(", ", "", 1)
     # Generalizing: It can reference multiple substitutions
     for y in y_s.split(","):
         y = y.strip().replace(" ", "")

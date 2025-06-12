@@ -17,16 +17,8 @@ def get_isoforms(text):
     output_isoforms = []
     for isoform in isoforms.split(", "):
         isoform = isoform.strip()
-        output_isoforms.append("Isoform " + isoform)
-    output_isoforms = intersperse(output_isoforms, ", ")
-    output_isoforms = "".join(output_isoforms)
+        output_isoforms.append(", Isoform " + isoform)
     return output_isoforms
-
-#https://stackoverflow.com/questions/5920643/add-an-item-between-each-item-already-in-the-list
-def intersperse(lst, item):
-    result = [item] * (len(lst) * 2 - 1)
-    result[0::2] = lst
-    return result
 
 def _get_qualifiers(edge):
     """ A simple method to retrieve qualifiers. It always returns a list """
