@@ -22,7 +22,7 @@ from protgraph.ft_execution.var_seq import (_get_isoforms_of_entry,
 from protgraph.graph_collapse_edges import collapse_parallel_edges
 from protgraph.graph_statistics import get_statistics
 from protgraph.merge_aminoacids import merge_aminoacids
-from protgraph.scripts.peptide_search import contains_path_string
+from protgraph.scripts.peptide_search import add_peptides_to_graph, contains_path_string
 from protgraph.verify_graphs import verify_graph
 
 
@@ -187,6 +187,11 @@ def generate_graph_consumer(entry_queue, graph_queue, common_out_queue, proc_id,
             if not kwargs["no_merge"]:
                 merge_aminoacids(graph)
 
+            if kwargs["search_graph"]:
+                print("Does this graph contain", kwargs["search_string"], "?:", contains_path_string(graph, kwargs["search_string"]))
+                add_peptides_to_graph(graph, [kwargs["search_string"]])
+            
+
             # Annotate weights for edges and nodes (maybe even the smallest weight possible to get to the end node)
             annotate_weights(graph, **kwargs)
 
@@ -196,9 +201,6 @@ def generate_graph_consumer(entry_queue, graph_queue, common_out_queue, proc_id,
             # Verify graphs if wanted:
             if kwargs["verify_graph"]:
                 verify_graph(graph)
-
-            if kwargs["search_graph"]:
-                print("Does this graph contain", kwargs["search_string"], "?:", contains_path_string(graph, kwargs["search_string"]))
 
             # Persist or export graphs with speicified exporters
             graph_exporters.export_graph(graph, common_out_queue)

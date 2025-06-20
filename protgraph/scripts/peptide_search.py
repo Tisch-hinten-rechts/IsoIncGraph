@@ -67,6 +67,43 @@ def contains_path_string(g: ig.Graph, peptide: str) -> List[List[int]]:
                     paths.append([node])                # peptide already finished  TODO: from when to where     
                 path = dfs(node, start + m, m)
                 if path is not None:                    # peptide found TODO: from when
-                    paths.append([node] + list(path))
+                    paths.append(list(path))
 
     return paths
+
+def add_peptides_to_graph(graph, peptides):
+    node_peptides = dict()
+    edge_peptides = dict()
+    for peptide in peptides:
+        paths = contains_path_string(graph, peptide)
+        for path in paths:
+            index = 0 #TODO: custom dict with new method for these duplicate three lines
+            node = path[index]
+            node_matched_peptides = node_peptides.pop(node, set())
+            node_matched_peptides.add(peptide)
+            node_peptides[node] = node_matched_peptides
+            while index < len(path)-1:
+                index += 1
+                node = path[index]
+                node_matched_peptides = node_peptides.pop(node, set())
+                node_matched_peptides.add(peptide)
+                node_peptides[node] = node_matched_peptides
+                predecessor = path[index-1]
+                edge_id = graph.get_eid(predecessor, node)
+                edge_matched_peptides = edge_peptides.pop(edge_id, set())
+                edge_matched_peptides.add(peptide)
+                edge_peptides[edge_id] = edge_matched_peptides
+            node = path[index]
+            node_matched_peptides = node_peptides.pop(node, set())
+            node_matched_peptides.add(peptide)
+            node_peptides[node] = node_matched_peptides
+    
+    for key, value in edge_peptides.items():
+        peptide_string = ", ".join(value)
+        graph.es[key]["peptides"] = peptide_string
+    print(node_peptides)
+    print(type(node_peptides))
+    for key, value in node_peptides.items():
+        peptide_string = ", ".join(value)
+        graph.vs[key]["peptides"] = peptide_string
+    return
