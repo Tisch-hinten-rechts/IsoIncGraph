@@ -22,6 +22,7 @@ from protgraph.ft_execution.var_seq import (_get_isoforms_of_entry,
 from protgraph.graph_collapse_edges import collapse_parallel_edges
 from protgraph.graph_statistics import get_statistics
 from protgraph.merge_aminoacids import merge_aminoacids
+from protgraph.scripts.peptide_search import contains_path_string
 from protgraph.verify_graphs import verify_graph
 
 
@@ -65,7 +66,6 @@ def _sort_entry_features(entry):
         sorted_features[f.type].append(f)
 
     # Return the dictionary
-    print("Sorted:", sorted_features)
     return sorted_features
 
 
@@ -150,9 +150,6 @@ def generate_graph_consumer(entry_queue, graph_queue, common_out_queue, proc_id,
 
             # Parse entry in graph generation process, so that more work is done in the consumer
             entry = SwissProt.read(io.BytesIO(io_entry))
-            print("En0try", entry)
-            print("Typ vom Entry", type(entry))
-            print("Liste:", entry.accessions)
 
             if kwargs["exclude_accessions"] and entry.accessions[0] in kwargs["exclude_accessions"]:
                 # This effectively skips an entry at the cost to check whether to skip in EACH entry!
@@ -199,6 +196,9 @@ def generate_graph_consumer(entry_queue, graph_queue, common_out_queue, proc_id,
             # Verify graphs if wanted:
             if kwargs["verify_graph"]:
                 verify_graph(graph)
+
+            if kwargs["search_graph"]:
+                print("Does this graph contain", kwargs["search_string"], "?:", contains_path_string(graph, kwargs["search_string"]))
 
             # Persist or export graphs with speicified exporters
             graph_exporters.export_graph(graph, common_out_queue)

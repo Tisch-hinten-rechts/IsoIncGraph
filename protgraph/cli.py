@@ -242,6 +242,14 @@ def add_graph_generation(group):
         help="Set the size of the queues ('reading of entries'-, 'writing of entries'- and statistics-queue), "
         "default is 30000"
     )
+    group.add_argument(
+        "--search_graph", "-sg", default=False, action="store_true",
+        help="Set if a peptide should be searched in the graph"
+    )
+    group.add_argument(
+        "--search_string", "-sst", type=str,
+        help="Set the peptide to be searched in the graph"
+    )
 
 
 def add_statistics(group):

@@ -274,8 +274,6 @@ def _get_edge_attrs(edge_attrs, concat_qualifiers):
 
     # add here the qualifiers afterwards from merged supernodes
     if concat_qualifiers is not None:
-        print("sheeessh", attrs["qualifiers"], type(attrs["qualifiers"]))
-        print("biiiinggg", concat_qualifiers, type(concat_qualifiers))
         attrs["qualifiers"] += concat_qualifiers
 
     for key in edge_attrs.keys():
