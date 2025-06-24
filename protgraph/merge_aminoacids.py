@@ -4,7 +4,7 @@ def traverse_to_end(graph_entry, complete_chain, possible_nodes, single_in, curr
         possible_nodes.remove(current_node)
         c.append(current_node)
         next_node = graph_entry.vs[current_node].neighbors(mode="OUT")[0].index
-        if graph_entry.vs[current_node]["peptides"] == graph_entry.vs[next_node]["peptides"]:
+        if graph_entry.vs[current_node].attributes().get("peptides") == graph_entry.vs[next_node].attributes().get("peptides"):
             current_node = next_node
         else:
             # Skip chains containing only 1 element
@@ -137,7 +137,7 @@ def merge_aminoacids(graph_entry):
         m_aminoacid = "".join([x["aminoacid"] for x in sorted_nodes])  # Concat aminoacids
         m_position = sorted_nodes[0]["position"]  # Retrieve only the first position
         m_accession = _get_single_set_element(sorted_nodes, "accession")  # Get the ONLY accession
-        m_peptides = sorted_nodes[0]["peptides"]  # Peptides should be the same for all nodes per chain
+        m_peptides = sorted_nodes[0].get("peptides")  # Peptides should be the same for all nodes per chain
         # Now the attributes in nodes, which may be present
         m_isoform_accession = _get_single_set_element(sorted_nodes, "isoform_accession")  # Get the ONLY iso_accession
         m_isoform_position = sorted_nodes[0]["isoform_position"] if "isoform_position" in sorted_nodes[0] else None
