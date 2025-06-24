@@ -182,14 +182,15 @@ def generate_graph_consumer(entry_queue, graph_queue, common_out_queue, proc_id,
             # Collapse parallel edges in a graph
             if not kwargs["no_collapsing_edges"]:
                 collapse_parallel_edges(graph)
-
+            
+            #Search for peptides and annotate matches on the graph if wanted:
+            if kwargs["search_graph"]:
+                print("\n Does this graph contain", kwargs["search_string"], "?:", contains_path_string(graph, kwargs["search_string"]))
+                add_peptides_to_graph(graph, [kwargs["search_string"]])
+            
             # Merge (summarize) graph if wanted
             if not kwargs["no_merge"]:
                 merge_aminoacids(graph)
-
-            if kwargs["search_graph"]:
-                print("Does this graph contain", kwargs["search_string"], "?:", contains_path_string(graph, kwargs["search_string"]))
-                add_peptides_to_graph(graph, [kwargs["search_string"]])
             
 
             # Annotate weights for edges and nodes (maybe even the smallest weight possible to get to the end node)
