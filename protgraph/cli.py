@@ -247,7 +247,7 @@ def add_graph_generation(group):
         help="Set if a peptide should be searched in the graph"
     )
     group.add_argument(
-        "--search_string", "-sst", type=str,
+        "--search_string", "-sst", type=str, action="append",
         help="Set the peptide to be searched in the graph"
     )
 
@@ -322,6 +322,10 @@ def add_statistics(group):
 
 
 def add_graph_exports(group):
+    group.add_argument(
+        "--output_file", "-of", type=str,
+        help="Set a custom output file name. Default is the accession name of the input data"
+    )
     group.add_argument(
         "--export_output_folder", "-eo", default=os.path.join(os.getcwd(), "exported_graphs"), type=str,
         help="Set the output folder to specify the dirctory of exported graphs (dot, graphml, gml) NOTE: It will "
