@@ -95,9 +95,13 @@ def add_peptides_to_graph(graph, peptides):
 
     #add peptide information to the spanning nodes and edges
     for key, value in edge_peptides.items():
-        peptide_string = ", ".join(value)
+        peptides = list(value)  #converting the set to a list and sorting to have a deterministic seqeuence of the peptides 
+        peptides.sort()
+        peptide_string = ", ".join(peptides)
         graph.es[key]["peptides"] = peptide_string
     for key, value in node_peptides.items():
-        peptide_string = ", ".join(value)
+        peptides = list(value)
+        peptides.sort()
+        peptide_string = ", ".join(peptides)
         graph.vs[key]["peptides"] = peptide_string
     return
