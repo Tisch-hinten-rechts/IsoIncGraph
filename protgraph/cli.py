@@ -247,7 +247,7 @@ def add_graph_generation(group):
         help="Set if a peptide should be searched in the graph"
     )
     group.add_argument(
-        "--search_string", "-sst", type=str, action="append",
+        "--peptide", "-pep", type=str, action="append",
         help="Set the peptide to be searched in the graph"
     )
 
