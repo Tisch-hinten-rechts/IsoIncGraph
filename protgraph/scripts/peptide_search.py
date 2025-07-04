@@ -1,5 +1,6 @@
 from functools import lru_cache
 import igraph as ig
+import pandas as pd
 from typing import List, Optional, Tuple
 
 Path = Tuple[int, ...]
@@ -70,7 +71,14 @@ def contains_path_string(g: ig.Graph, peptide: str) -> list[list[int]]:
 
     return paths
 
-def add_peptides_to_graph(graph, peptides):
+def get_peptides(**kwargs):
+    peptides = []
+    if kwargs["peptide_file"]:
+        df = pd.read_csv(kwargs["peptide_file"])
+    return peptides
+
+def add_peptides_to_graph(graph, **kwargs):
+    peptides = get_peptides(**kwargs)
     node_peptides = dict()
     edge_peptides = dict()
     for peptide in peptides:
