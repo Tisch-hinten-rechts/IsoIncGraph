@@ -73,16 +73,22 @@ def contains_path_string(g: ig.Graph, peptide: str) -> list[list[int]]:
 
 def get_peptides(protein_id, **kwargs):
     peptides = []
+    metadata = {}
     if kwargs["peptide_file"]:
         df = pd.read_csv(kwargs["peptide_file"])
         df["Normalized Protein ID"] = df["Protein ID"].str.split("-").str[0]
         grouped = df.groupby("Normalized Protein ID")
-        peptides = grouped.get_group(protein_id)["Sequence"].tolist()
+        group = grouped.get_group(protein_id)
+        peptides = group["Sequence"].tolist()
+        metadata = {
+            row["Sequence"]: (row["Intensity"], row["Sample"])
+            for _, row in group.iterrows()
+        }
     else: 
         peptides = kwargs["peptide"]
-    return peptides
+    return peptides, metadata
 
-def add_peptides_to_graph(graph, peptides):
+def add_peptides_to_graph(graph, peptides, metadata, show_intensity):
     node_peptides = dict()
     edge_peptides = dict()
     for peptide in peptides:
@@ -111,9 +117,24 @@ def add_peptides_to_graph(graph, peptides):
         peptides.sort()
         peptide_string = ", ".join(peptides)
         graph.es[key]["peptides"] = peptide_string
+        if show_intensity:
+            intensity = []
+            for peptide in peptides:
+                if peptide in metadata.keys():
+                    intensity.append(str(metadata[peptide][0]))
+            intensity_string = ", ".join(intensity)
+            graph.es[key]["intensity"] = intensity_string
     for key, value in node_peptides.items():
         peptides = list(value)
         peptides.sort()
         peptide_string = ", ".join(peptides)
         graph.vs[key]["peptides"] = peptide_string
+        if show_intensity:
+            intensity = []
+            for peptide in peptides:
+                if peptide in metadata.keys():
+                    intensity.append(str(metadata[peptide][0]))
+                    print("hallo")
+            intensity_string = ", ".join(intensity)
+            graph.vs[key]["intensity"] = intensity_string
     return
