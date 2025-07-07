@@ -71,14 +71,18 @@ def contains_path_string(g: ig.Graph, peptide: str) -> list[list[int]]:
 
     return paths
 
-def get_peptides(**kwargs):
+def get_peptides(protein_id, **kwargs):
     peptides = []
     if kwargs["peptide_file"]:
         df = pd.read_csv(kwargs["peptide_file"])
+        df["Normalized Protein ID"] = df["Protein ID"].str.split("-").str[0]
+        grouped = df.groupby("Normalized Protein ID")
+        peptides = grouped.get_group(protein_id)["Sequence"].tolist()
+    else: 
+        peptides = kwargs["peptide"]
     return peptides
 
-def add_peptides_to_graph(graph, **kwargs):
-    peptides = get_peptides(**kwargs)
+def add_peptides_to_graph(graph, peptides):
     node_peptides = dict()
     edge_peptides = dict()
     for peptide in peptides:
