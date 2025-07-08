@@ -88,7 +88,7 @@ def get_peptides(protein_id, **kwargs):
         peptides = kwargs["peptide"]
     return peptides, metadata
 
-def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_peptides):
+def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_peptides, count):
     node_peptides = dict()
     edge_peptides = dict()
     for peptide in peptides:
@@ -115,6 +115,8 @@ def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_pepti
     for key, value in edge_peptides.items():
         peptides = list(value)  #converting the set to a list and sorting to have a deterministic seqeuence of the peptides 
         peptides.sort()
+        if count:
+            graph.es[key]["count"] = len(peptides)
         peptide_string = ", ".join(peptides)
         graph.es[key]["peptides"] = peptide_string
         if show_intensity:
@@ -134,6 +136,8 @@ def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_pepti
                 if not any(peptide in possible_super_peptide for j, possible_super_peptide in enumerate(peptides) if i < j):
                     result.append(peptide)
             peptides = result
+        if count:
+            graph.vs[key]["count"] = len(peptides)
         peptide_string = ", ".join(peptides)
         graph.vs[key]["peptides"] = peptide_string
         if show_intensity:

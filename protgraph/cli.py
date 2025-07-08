@@ -262,8 +262,14 @@ def add_graph_generation(group):
     )
     group.add_argument(
         "--merge_peptides", "-mp", default=False, action="store_true",
-        help="Set if only the longest peptide sequence should be added to the peptide attribute of a node/edge when atleast one other peptide sequence starts and ends inside (including the first/last peptide) the displayed peptide sequence. This means that the longest peptide sequence will be a singular node rather than cut when a sub-sequence would start/end. E. g. given ABCD and BC would lead to a node ABCD rather than A-BC-D."
-        ""
+        help="Set if only the longest peptide sequence should be added to the peptide attribute of a node/edge when atleast one other"
+        " peptide sequence starts and ends inside (including the first/last peptide) the displayed peptide sequence. " 
+        "This means that the longest peptide sequence will be a singular node rather than cut when a sub-sequence would start/end. " 
+        "E. g. given ABCD and BC would lead to a node ABCD rather than A-BC-D."
+    )
+    group.add_argument(
+        "--count_peptides", "-cpep", default=False, action="store_true",
+        help="Set to count the  number of peptides that span a node/edge. The number will be saved as the attribute count."
     )
 
 

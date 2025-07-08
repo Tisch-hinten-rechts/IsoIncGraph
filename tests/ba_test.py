@@ -183,14 +183,14 @@ class FunctionalTest(unittest.TestCase):
                 "name": "Count",
                 "input_files": ["JKXXAA.txt"],
                 "output_file": "JKXXAA_peptide.graphml",
-                "expected": "expected_JKXXAA_peptide.graphml",
+                "expected": "expected_JKXXAA_count.graphml",
                 "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pep", "A", "-of", "JKXXAA_peptide", "-cpep"],
             },
             {
                 "name": "Count-Edge",
                 "input_files": ["JKXXAB.txt"],
                 "output_file": "JKXXAB_overlapping.graphml",
-                "expected": "expected_JKXXAB_peptide_overlapping.graphml",
+                "expected": "expected_JKXXAB_count_edge.graphml",
                 "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pep", "AB", "-pep", "BC", "-of", "JKXXAB_overlapping", "-cpep"],
             },
         ]
