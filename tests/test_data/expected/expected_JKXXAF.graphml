@@ -36,23 +36,23 @@
       <data key="v_accession">JKXXAF</data>
     </node>
     <edge source="n0" target="n1">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
       <data key="e_generic">None</data>
     </edge>
     <edge source="n1" target="n2">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
       <data key="e_generic">None</data>
     </edge>
     <edge source="n2" target="n3">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
       <data key="e_generic">None</data>
     </edge>
     <edge source="n3" target="n4">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
       <data key="e_generic">None</data>
     </edge>
     <edge source="n1" target="n3">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
       <data key="e_generic">VARIANT</data>
     </edge>
   </graph>

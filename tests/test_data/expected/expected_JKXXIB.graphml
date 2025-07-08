@@ -39,22 +39,22 @@
       <data key="v_accession">JKXXIB</data>
     </node>
     <edge source="n0" target="n1">
-      <data key="e_isoforms">Canonical, Isoform 2</data>
+      <data key="e_isoforms">canonical, isoform 2</data>
     </edge>
     <edge source="n2" target="n3">
-      <data key="e_isoforms">Canonical, Isoform 2</data>
+      <data key="e_isoforms">canonical, isoform 2</data>
     </edge>
     <edge source="n1" target="n4">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
     </edge>
     <edge source="n4" target="n2">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
     </edge>
     <edge source="n1" target="n5">
-      <data key="e_isoforms">Isoform 2</data>
+      <data key="e_isoforms">isoform 2</data>
     </edge>
     <edge source="n5" target="n2">
-      <data key="e_isoforms">Isoform 2</data>
+      <data key="e_isoforms">isoform 2</data>
     </edge>
   </graph>
 </graphml>

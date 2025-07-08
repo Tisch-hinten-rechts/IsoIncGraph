@@ -42,19 +42,19 @@
       <data key="v_peptides">None</data>
     </node>
     <edge source="n0" target="n1">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
       <data key="e_peptides">None</data>
     </edge>
     <edge source="n1" target="n2">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
       <data key="e_peptides">AB</data>
     </edge>
     <edge source="n2" target="n3">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
       <data key="e_peptides">BC</data>
     </edge>
     <edge source="n3" target="n4">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
       <data key="e_peptides">None</data>
     </edge>
   </graph>

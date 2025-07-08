@@ -29,10 +29,10 @@
       <data key="v_peptides">None</data>
     </node>
     <edge source="n0" target="n1">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
     </edge>
     <edge source="n1" target="n2">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
     </edge>
   </graph>
 </graphml>

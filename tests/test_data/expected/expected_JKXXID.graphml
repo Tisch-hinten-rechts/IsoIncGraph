@@ -44,39 +44,39 @@
       <data key="v_accession">JKXXID</data>
     </node>
     <edge source="n0" target="n1">
-      <data key="e_isoforms">Canonical, Isoform 2</data>
+      <data key="e_isoforms">canonical, isoform 2</data>
       <data key="e_generic">None</data>
     </edge>
     <edge source="n1" target="n2">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
       <data key="e_generic">None</data>
     </edge>
     <edge source="n2" target="n3">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
       <data key="e_generic">None</data>
     </edge>
     <edge source="n3" target="n4">
-      <data key="e_isoforms">Canonical, Isoform 2</data>
+      <data key="e_isoforms">canonical, isoform 2</data>
       <data key="e_generic">None</data>
     </edge>
     <edge source="n2" target="n5">
-      <data key="e_isoforms">Canonical</data>
+      <data key="e_isoforms">canonical</data>
       <data key="e_generic">VARIANT</data>
     </edge>
     <edge source="n5" target="n4">
-      <data key="e_isoforms">Canonical, Isoform 2</data>
+      <data key="e_isoforms">canonical, isoform 2</data>
       <data key="e_generic">VARIANT</data>
     </edge>
     <edge source="n1" target="n6">
-      <data key="e_isoforms">Isoform 2</data>
+      <data key="e_isoforms">isoform 2</data>
       <data key="e_generic">None</data>
     </edge>
     <edge source="n6" target="n3">
-      <data key="e_isoforms">Isoform 2</data>
+      <data key="e_isoforms">isoform 2</data>
       <data key="e_generic">None</data>
     </edge>
     <edge source="n6" target="n5">
-      <data key="e_isoforms">Isoform 2</data>
+      <data key="e_isoforms">isoform 2</data>
       <data key="e_generic">VARIANT</data>
     </edge>
   </graph>
