@@ -193,6 +193,41 @@ class FunctionalTest(unittest.TestCase):
                 "expected": "expected_JKXXAB_count_edge.graphml",
                 "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pep", "AB", "-pep", "BC", "-of", "JKXXAB_overlapping", "-cpep"],
             },
+            {
+                "name": "Intensity-Default",
+                "input_files": ["JKXXAA.txt"],
+                "output_file": "JKXXAA_intensity_default.graphml",
+                "expected": "expected_JKXXAA_intensity_default.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_multiple_intensities.csv","-of", "JKXXAA_columns"],
+            },
+            {
+                "name": "Intensity-Median",
+                "input_files": ["JKXXAA.txt"],
+                "output_file": "JKXXAA_intensity_median.graphml",
+                "expected": "expected_JKXXAA_intensity_median.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_multiple_intensities.csv","-of", "JKXXAA_columns", "-me"],
+            },
+            {
+                "name": "Compare-Column-Default",
+                "input_files": ["JKXXAA.txt"],
+                "output_file": "JKXXAA_columns.graphml",
+                "expected": "expected_JKXXAA_compare_column.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_column.csv","-of", "JKXXAA_columns", "-mf", "tests/test_data/input/meta.csv", "-cc", "Group"],
+            },
+            {
+                "name": "Compare-Column-Median",
+                "input_files": ["JKXXAA.txt"],
+                "output_file": "JKXXAA_median.graphml",
+                "expected": "expected_JKXXAA_column_median.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_column.csv","-of", "JKXXAA_median", "-mf", "tests/test_data/input/meta.csv", "-cc", "Group", "-me"],
+            },
+            {
+                "name": "Intensity-Overlapping",
+                "input_files": ["JKXXAB.txt"],
+                "output_file": "JKXXAB_intensity_overlapping.graphml",
+                "expected": "expected_JKXXAB_intensity_overlapping.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_overlapping.csv","-of", "JKXXAA_intensity_overlapping", "-mf", "tests/test_data/input/meta.csv", "-cc", "Group"],
+            },
         ]
 
     def tearDown(self):
