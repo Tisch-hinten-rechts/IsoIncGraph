@@ -271,6 +271,11 @@ def add_graph_generation(group):
         "--count_peptides", "-cpep", default=False, action="store_true",
         help="Set to count the  number of peptides that span a node/edge. The number will be saved as the attribute count."
     )
+    group.add_argument(
+        "--median", "-me", default=False, action="store_true",
+        help="Set to change the peptide intensity aggregation from mean to median when there are multiple peptides with different intensities in the meta file."
+        "When not set, mean is used instead."
+    )
 
 
 def add_statistics(group):
