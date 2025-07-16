@@ -205,7 +205,14 @@ class FunctionalTest(unittest.TestCase):
                 "input_files": ["JKXXAA.txt"],
                 "output_file": "JKXXAA_intensity_median.graphml",
                 "expected": "expected_JKXXAA_intensity_median.graphml",
-                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_multiple_intensities.csv","-of", "JKXXAA_intensity_median", "-me", "-int"],
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_multiple_intensities.csv","-of", "JKXXAA_intensity_median", "-mi", "median", "-int"],
+            },
+            {
+                "name": "Intensity-Sum",
+                "input_files": ["JKXXAA.txt"],
+                "output_file": "JKXXAA_intensity_sum.graphml",
+                "expected": "expected_JKXXAA_intensity_sum.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_multiple_intensities.csv","-of", "JKXXAA_intensity_sum", "-mi", "sum","-int"],
             },
             {
                 "name": "Compare-Column-Default",
@@ -219,7 +226,14 @@ class FunctionalTest(unittest.TestCase):
                 "input_files": ["JKXXAA.txt"],
                 "output_file": "JKXXAA_median.graphml",
                 "expected": "expected_JKXXAA_column_median.graphml",
-                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_column.csv","-of", "JKXXAA_median", "-mf", "tests/test_data/input/meta.csv", "-cc", "Group", "-me", "-int"],
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_column.csv","-of", "JKXXAA_median", "-mf", "tests/test_data/input/meta.csv", "-cc", "Group", "-mi", "median", "-int"],
+            },
+            {
+                "name": "Compare-Column-Sum",
+                "input_files": ["JKXXAA.txt"],
+                "output_file": "JKXXAA_sum.graphml",
+                "expected": "expected_JKXXAA_column_sum.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_column.csv","-of", "JKXXAA_sum", "-mf", "tests/test_data/input/meta.csv", "-cc", "Group", "-mi", "sum", "-int"],
             },
             {
                 "name": "Intensity-Overlapping",
@@ -227,6 +241,27 @@ class FunctionalTest(unittest.TestCase):
                 "output_file": "JKXXAB_intensity_overlapping.graphml",
                 "expected": "expected_JKXXAB_intensity_overlapping.graphml",
                 "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_overlapping.csv","-of", "JKXXAB_intensity_overlapping", "-mf", "tests/test_data/input/meta.csv", "-cc", "Group", "-int"],
+            },
+            {
+                "name": "Intensity-Overlapping-Sum",
+                "input_files": ["JKXXAB.txt"],
+                "output_file": "JKXXAB_intensity_overlapping_sum.graphml",
+                "expected": "expected_JKXXAB_overlapping_sum.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_overlapping_three.csv","-of", "JKXXAB_intensity_overlapping_sum", "-int", "-oi", "sum"],
+            },
+            {
+                "name": "Intensity-Overlapping-Median",
+                "input_files": ["JKXXAB.txt"],
+                "output_file": "JKXXAB_intensity_overlapping_median.graphml",
+                "expected": "expected_JKXXAB_overlapping_median.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_overlapping_three.csv","-of", "JKXXAB_intensity_overlapping_median", "-int", "-oi", "median"],
+            },
+            {
+                "name": "Intensity-Overlapping-Mean",
+                "input_files": ["JKXXAB.txt"],
+                "output_file": "JKXXAB_intensity_overlapping_mean.graphml",
+                "expected": "expected_JKXXAB_overlapping_mean.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_overlapping_three.csv","-of", "JKXXAB_intensity_overlapping_mean", "-int", "-oi", "mean"],
             },
         ]
 

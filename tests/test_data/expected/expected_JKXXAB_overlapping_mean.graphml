@@ -10,33 +10,63 @@
   <key id="v_peptides" for="node" attr.name="peptides" attr.type="string"/>
   <key id="v_intensity" for="node" attr.name="intensity" attr.type="string"/>
   <key id="e_isoforms" for="edge" attr.name="isoforms" attr.type="string"/>
+  <key id="e_peptides" for="edge" attr.name="peptides" attr.type="string"/>
+  <key id="e_intensity" for="edge" attr.name="intensity" attr.type="string"/>
   <graph id="G" edgedefault="directed">
     <node id="n0">
       <data key="v_aminoacid">__start__</data>
       <data key="v_position">0</data>
-      <data key="v_accession">JKXXAA</data>
+      <data key="v_accession">JKXXAB</data>
       <data key="v_peptides">None</data>
-      <data key="v_intensity">(AD, CTR)</data>
+      <data key="v_intensity">None</data>
     </node>
     <node id="n1">
       <data key="v_aminoacid">A</data>
       <data key="v_position">1</data>
-      <data key="v_accession">JKXXAA</data>
-      <data key="v_peptides">A</data>
-      <data key="v_intensity">(4, 104)</data>
+      <data key="v_accession">JKXXAB</data>
+      <data key="v_peptides">AB</data>
+      <data key="v_intensity">51</data>
     </node>
     <node id="n2">
-      <data key="v_aminoacid">__end__</data>
+      <data key="v_aminoacid">B</data>
       <data key="v_position">2</data>
-      <data key="v_accession">JKXXAA</data>
+      <data key="v_accession">JKXXAB</data>
+      <data key="v_peptides">AB, B, BC</data>
+      <data key="v_intensity">51.67</data>
+    </node>
+    <node id="n3">
+      <data key="v_aminoacid">C</data>
+      <data key="v_position">3</data>
+      <data key="v_accession">JKXXAB</data>
+      <data key="v_peptides">BC</data>
+      <data key="v_intensity">52</data>
+    </node>
+    <node id="n4">
+      <data key="v_aminoacid">__end__</data>
+      <data key="v_position">4</data>
+      <data key="v_accession">JKXXAB</data>
       <data key="v_peptides">None</data>
       <data key="v_intensity">None</data>
     </node>
     <edge source="n0" target="n1">
       <data key="e_isoforms">canonical</data>
+      <data key="e_peptides">None</data>
+      <data key="e_intensity">None</data>
     </edge>
     <edge source="n1" target="n2">
       <data key="e_isoforms">canonical</data>
+      <data key="e_peptides">AB</data>
+      <data key="e_intensity">51</data>
+    </edge>
+    <edge source="n2" target="n3">
+      <data key="e_isoforms">canonical</data>
+      <data key="e_peptides">BC</data>
+      <data key="e_intensity">52</data>
+    </edge>
+    <edge source="n3" target="n4">
+      <data key="e_isoforms">canonical</data>
+      <data key="e_peptides">None</data>
+      <data key="e_intensity">None</data>
     </edge>
   </graph>
 </graphml>
