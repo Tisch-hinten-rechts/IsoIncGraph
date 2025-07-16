@@ -251,16 +251,6 @@ def add_graph_generation(group):
         help="Set the peptide to be searched in the graph"
     )
     group.add_argument(
-        "--peptide_file", "-pf", type=check_if_file_exists,
-        help="Set a csv file with peptide and intensity information. It should have the format: Sample,Protein ID,Sequence,Intensity,PEP"
-        "Only the peptides that belong to the protein (including isoforms) from the EMBL-Entry will searched on the graph, analog to the use of multiple --peptide flags."
-        "Intensity will not be displayed automatically, use the --intensity flag for this."
-    )
-    group.add_argument(
-        "--intensity", "-int", default=False, action="store_true",
-        help="Set if the intensities from the peptide file should be dispayled on the graph."
-    )
-    group.add_argument(
         "--merge_peptides", "-mp", default=False, action="store_true",
         help="Set if only the longest peptide sequence should be added to the peptide attribute of a node/edge when atleast one other"
         " peptide sequence starts and ends inside (including the first/last peptide) the displayed peptide sequence. " 
@@ -272,9 +262,28 @@ def add_graph_generation(group):
         help="Set to count the  number of peptides that span a node/edge. The number will be saved as the attribute count."
     )
     group.add_argument(
+        "--peptide_file", "-pf", type=check_if_file_exists,
+        help="Set a csv file with peptide and intensity information. It should have the format: Sample,Protein ID,Sequence,Intensity,PEP"
+        "Only the peptides that belong to the protein (including isoforms) from the EMBL-Entry will searched on the graph, analog to the use of multiple --peptide flags."
+        "Intensity will not be displayed automatically, use the --intensity flag for this."
+    )
+    group.add_argument(
+        "--metadata_file", "-mf", type=check_if_file_exists,
+        help="Set a csv file with metadata information for the peptide file. It should have the format: Sample,Column1,...,Column2"
+        "The column "
+    )
+    group.add_argument(
+        "--intensity", "-int", default=False, action="store_true",
+        help="Set if the intensities from the peptide file should be dispayled on the graph."
+    )
+    group.add_argument(
         "--median", "-me", default=False, action="store_true",
         help="Set to change the peptide intensity aggregation from mean to median when there are multiple peptides with different intensities in the meta file."
         "When not set, mean is used instead."
+    )
+    group.add_argument(
+        "--compare_columns", "-cc", type=str,
+        help="Select the column from the metadata file which will be used to compare the intensities of the different categories."
     )
 
 

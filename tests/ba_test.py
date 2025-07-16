@@ -226,7 +226,7 @@ class FunctionalTest(unittest.TestCase):
                 "input_files": ["JKXXAB.txt"],
                 "output_file": "JKXXAB_intensity_overlapping.graphml",
                 "expected": "expected_JKXXAB_intensity_overlapping.graphml",
-                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_overlapping.csv","-of", "JKXXAA_intensity_overlapping", "-mf", "tests/test_data/input/meta.csv", "-cc", "Group", "-int"],
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_overlapping.csv","-of", "JKXXAB_intensity_overlapping", "-mf", "tests/test_data/input/meta.csv", "-cc", "Group", "-int"],
             },
         ]
 

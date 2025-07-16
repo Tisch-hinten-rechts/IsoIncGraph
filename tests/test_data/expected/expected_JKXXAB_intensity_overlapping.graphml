@@ -51,6 +51,7 @@
     <edge source="n0" target="n1">
       <data key="e_isoforms">canonical</data>
       <data key="e_peptides">None</data>
+      <data key="e_intensity">None</data>
     </edge>
     <edge source="n1" target="n2">
       <data key="e_isoforms">canonical</data>
@@ -65,6 +66,7 @@
     <edge source="n3" target="n4">
       <data key="e_isoforms">canonical</data>
       <data key="e_peptides">None</data>
+      <data key="e_intensity">None</data>
     </edge>
   </graph>
 </graphml>

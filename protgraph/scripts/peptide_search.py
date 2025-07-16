@@ -77,19 +77,46 @@ def get_peptides(protein_id, **kwargs):
     metadata = {}
     if kwargs["peptide_file"]:
         df = pd.read_csv(kwargs["peptide_file"])
-        df["Normalized Protein ID"] = df["Protein ID"].str.split("-").str[0]
+        df["Normalized Protein ID"] = df["Protein ID"].str.split("-").str[0] #sometimes the protein ids are for a specific isoform (eg. P10636-2), we only want the protein id
         normalized_isoforms = df.groupby("Normalized Protein ID")
         grouped = normalized_isoforms.get_group(protein_id)
-        modified = pd.DataFrame()
-        if kwargs["median"]:
-            modified = grouped.groupby(["Sequence"])["Intensity"].median()
+        if kwargs["compare_columns"]:
+            meta_df = pd.DataFrame()
+            try:
+                meta_df = pd.read_csv(kwargs["metadata_file"])
+            except Exception as e:
+                print("Please specify a metadata file")
+            grouped = grouped.merge(meta_df, on="Sample")
+            modified = pd.DataFrame()
+            if kwargs["median"]:
+                modified = grouped.groupby(["Sequence", kwargs["compare_columns"]])["Intensity"].median()
+            else:
+                modified = grouped.groupby(["Sequence", kwargs["compare_columns"]])["Intensity"].mean()
+            modified = modified.unstack(level=kwargs["compare_columns"])
+            peptides = modified.index
+            metadata = {
+                index: [value for value in row]
+                for index, row in modified.iterrows()
+            }
         else:
-            modified = grouped.groupby(["Sequence"])["Intensity"].mean()
-        peptides = modified.index
-        metadata = modified.to_dict()
+            if kwargs["median"]:
+                modified = grouped.groupby(["Sequence"])["Intensity"].median()
+            else:
+                modified = grouped.groupby(["Sequence"])["Intensity"].mean()
+            peptides = modified.index
+            metadata = modified.to_dict()
     else: 
         peptides = kwargs["peptide"]
     return peptides, metadata
+
+def metadata_to_string(metadata):
+    if type(metadata) == list:
+        metadata = [str(trunc(i) if trunc(i) == i else i) for i in metadata] #dont want to have .0
+        metadata = ", ".join(metadata)
+        metadata = "(" + metadata + ")"
+    else: 
+        metadata = str(trunc(metadata) if trunc(metadata) == metadata else metadata)
+    return metadata
 
 def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_peptides, count):
     node_peptides = dict()
@@ -126,7 +153,7 @@ def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_pepti
             intensity = []
             for peptide in peptides:
                 if peptide in metadata.keys():
-                    intensity.append(str(trunc(metadata[peptide]) if trunc(metadata[peptide]) == metadata[peptide] else metadata[peptide]))
+                    intensity.append(metadata_to_string(metadata[peptide]))
             intensity_string = ", ".join(intensity)
             graph.es[key]["intensity"] = intensity_string
     for key, value in node_peptides.items():
@@ -147,7 +174,7 @@ def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_pepti
             intensity = []
             for peptide in peptides:
                 if peptide in metadata.keys():
-                    intensity.append(str(trunc(metadata[peptide]) if trunc(metadata[peptide]) == metadata[peptide] else metadata[peptide]))
+                    intensity.append(metadata_to_string(metadata[peptide]))
             intensity_string = ", ".join(intensity)
             graph.vs[key]["intensity"] = intensity_string
     return
