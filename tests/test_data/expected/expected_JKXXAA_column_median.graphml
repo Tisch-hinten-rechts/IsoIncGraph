@@ -16,7 +16,7 @@
       <data key="v_position">0</data>
       <data key="v_accession">JKXXAA</data>
       <data key="v_peptides">None</data>
-      <data key="v_intensity">None</data>
+      <data key="v_intensity">(AD, CTR)</data>
     </node>
     <node id="n1">
       <data key="v_aminoacid">A</data>

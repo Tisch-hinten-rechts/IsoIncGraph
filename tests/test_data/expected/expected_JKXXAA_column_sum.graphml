@@ -23,7 +23,7 @@
       <data key="v_position">1</data>
       <data key="v_accession">JKXXAA</data>
       <data key="v_peptides">A</data>
-      <data key="v_intensity">(4, 104)</data>
+      <data key="v_intensity">(12, 312)</data>
     </node>
     <node id="n2">
       <data key="v_aminoacid">__end__</data>
