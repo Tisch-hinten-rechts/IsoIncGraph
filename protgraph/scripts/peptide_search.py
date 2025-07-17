@@ -79,7 +79,10 @@ def get_peptides(protein_id, **kwargs):
         df = pd.read_csv(kwargs["peptide_file"])
         df["Normalized Protein ID"] = df["Protein ID"].str.split("-").str[0] #sometimes the protein ids are for a specific isoform (eg. P10636-2), we only want the protein id
         normalized_isoforms = df.groupby("Normalized Protein ID")
-        grouped = normalized_isoforms.get_group(protein_id)
+        try:
+            grouped = normalized_isoforms.get_group(protein_id)
+        except:
+            return peptides, metadata
         if kwargs["compare_columns"]:
             meta_df = pd.DataFrame()
             try:
@@ -98,6 +101,7 @@ def get_peptides(protein_id, **kwargs):
                 index: [value for value in row]
                 for index, row in modified.iterrows()
             }
+            metadata["_start_"] = modified.columns  #save info in what order
         else:
             if kwargs["median"]:
                 modified = grouped.groupby(["Sequence"])["Intensity"].median()
@@ -110,13 +114,11 @@ def get_peptides(protein_id, **kwargs):
     return peptides, metadata
 
 def metadata_to_string(metadata):
-    if type(metadata) == list:
-        metadata = [str(trunc(i) if trunc(i) == i else i) for i in metadata] #dont want to have .0
+    if type(metadata) != int:
+        metadata = [str(i) for i in metadata]
         metadata = ", ".join(metadata)
         metadata = "(" + metadata + ")"
-    else: 
-        metadata = str(trunc(metadata) if trunc(metadata) == metadata else metadata)
-    return metadata
+    return str(metadata)
 
 def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_peptides, count):
     node_peptides = dict()
@@ -177,4 +179,6 @@ def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_pepti
                     intensity.append(metadata_to_string(metadata[peptide]))
             intensity_string = ", ".join(intensity)
             graph.vs[key]["intensity"] = intensity_string
+    if "_start_" in metadata.keys():
+        graph.vs[0]["intensity"] = metadata_to_string(metadata["_start_"])
     return
