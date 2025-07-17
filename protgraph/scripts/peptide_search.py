@@ -91,10 +91,7 @@ def get_peptides(protein_id, **kwargs):
                 print("Please specify a metadata file")
             grouped = grouped.merge(meta_df, on="Sample")
             modified = pd.DataFrame()
-            if kwargs["median"]:
-                modified = grouped.groupby(["Sequence", kwargs["compare_columns"]])["Intensity"].median()
-            else:
-                modified = grouped.groupby(["Sequence", kwargs["compare_columns"]])["Intensity"].mean()
+            modified = grouped.groupby(["Sequence", kwargs["compare_columns"]])["Intensity"].agg(kwargs["multiple_intensities"])
             modified = modified.unstack(level=kwargs["compare_columns"])
             peptides = modified.index
             metadata = {
@@ -103,10 +100,7 @@ def get_peptides(protein_id, **kwargs):
             }
             metadata["_start_"] = modified.columns  #save info in what order
         else:
-            if kwargs["median"]:
-                modified = grouped.groupby(["Sequence"])["Intensity"].median()
-            else:
-                modified = grouped.groupby(["Sequence"])["Intensity"].mean()
+            modified = grouped.groupby(["Sequence"])["Intensity"].agg(kwargs["multiple_intensities"])
             peptides = modified.index
             metadata = modified.to_dict()
     else: 
@@ -114,7 +108,7 @@ def get_peptides(protein_id, **kwargs):
     return peptides, metadata
 
 def metadata_to_string(metadata):
-    if type(metadata) != int:
+    if type(metadata) != int and type(metadata) != float:
         metadata = [str(i) for i in metadata]
         metadata = ", ".join(metadata)
         metadata = "(" + metadata + ")"
