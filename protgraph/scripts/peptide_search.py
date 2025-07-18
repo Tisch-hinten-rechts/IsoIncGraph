@@ -1,5 +1,5 @@
 from functools import lru_cache
-from math import trunc
+from statistics import mean, median
 import igraph as ig
 import pandas as pd
 from typing import List, Optional, Tuple
@@ -79,7 +79,10 @@ def get_peptides(protein_id, **kwargs):
         df = pd.read_csv(kwargs["peptide_file"])
         df["Normalized Protein ID"] = df["Protein ID"].str.split("-").str[0] #sometimes the protein ids are for a specific isoform (eg. P10636-2), we only want the protein id
         normalized_isoforms = df.groupby("Normalized Protein ID")
-        grouped = normalized_isoforms.get_group(protein_id)
+        try:
+            grouped = normalized_isoforms.get_group(protein_id)
+        except:
+            return peptides, metadata
         if kwargs["compare_columns"]:
             meta_df = pd.DataFrame()
             try:
@@ -88,21 +91,16 @@ def get_peptides(protein_id, **kwargs):
                 print("Please specify a metadata file")
             grouped = grouped.merge(meta_df, on="Sample")
             modified = pd.DataFrame()
-            if kwargs["median"]:
-                modified = grouped.groupby(["Sequence", kwargs["compare_columns"]])["Intensity"].median()
-            else:
-                modified = grouped.groupby(["Sequence", kwargs["compare_columns"]])["Intensity"].mean()
+            modified = grouped.groupby(["Sequence", kwargs["compare_columns"]])["Intensity"].agg(kwargs["multiple_intensities"])
             modified = modified.unstack(level=kwargs["compare_columns"])
             peptides = modified.index
             metadata = {
                 index: [value for value in row]
                 for index, row in modified.iterrows()
             }
+            metadata["_start_"] = modified.columns  #save info in what order
         else:
-            if kwargs["median"]:
-                modified = grouped.groupby(["Sequence"])["Intensity"].median()
-            else:
-                modified = grouped.groupby(["Sequence"])["Intensity"].mean()
+            modified = grouped.groupby(["Sequence"])["Intensity"].agg(kwargs["multiple_intensities"])
             peptides = modified.index
             metadata = modified.to_dict()
     else: 
@@ -110,15 +108,21 @@ def get_peptides(protein_id, **kwargs):
     return peptides, metadata
 
 def metadata_to_string(metadata):
-    if type(metadata) == list:
-        metadata = [str(trunc(i) if trunc(i) == i else i) for i in metadata] #dont want to have .0
+    if type(metadata) != int and type(metadata) != float:
+        metadata = [str(i) for i in metadata]
         metadata = ", ".join(metadata)
         metadata = "(" + metadata + ")"
-    else: 
-        metadata = str(trunc(metadata) if trunc(metadata) == metadata else metadata)
-    return metadata
+    return str(metadata)
 
-def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_peptides, count):
+def aggregate(iterable, method):
+    if method == "sum":
+        return str(sum(iterable))
+    if method == "median":
+        return str(median(iterable))
+    if method == "mean":
+        return  str(mean(iterable))
+
+def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_peptides, count, aggregation_method):
     node_peptides = dict()
     edge_peptides = dict()
     for peptide in peptides:
@@ -172,9 +176,17 @@ def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_pepti
         graph.vs[key]["peptides"] = peptide_string
         if show_intensity:
             intensity = []
-            for peptide in peptides:
-                if peptide in metadata.keys():
-                    intensity.append(metadata_to_string(metadata[peptide]))
+            if aggregation_method:
+                for peptide in peptides:
+                    if peptide in metadata.keys(): 
+                        intensity.append(metadata[peptide])
+                intensity = [aggregate(intensity, aggregation_method)]
+            else:
+                for peptide in peptides:
+                    if peptide in metadata.keys(): 
+                        intensity.append(metadata_to_string(metadata[peptide]))
             intensity_string = ", ".join(intensity)
             graph.vs[key]["intensity"] = intensity_string
+    if "_start_" in metadata.keys():
+        graph.vs[0]["intensity"] = metadata_to_string(metadata["_start_"])
     return

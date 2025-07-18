@@ -276,14 +276,23 @@ def add_graph_generation(group):
         "--intensity", "-int", default=False, action="store_true",
         help="Set if the intensities from the peptide file should be dispayled on the graph."
     )
+    aggregation_methods = [
+        "mean", "sum", "median"
+    ]
     group.add_argument(
-        "--median", "-me", default=False, action="store_true",
-        help="Set to change the peptide intensity aggregation from mean to median when there are multiple peptides with different intensities in the meta file."
-        "When not set, mean is used instead."
+        "--multiple_intensities", "-mi", type=str, choices=aggregation_methods, default=aggregation_methods[0],
+        help="Select the peptide intensity aggregation when there are multiple peptides with different intensities in the peptide file."
+        "Accepted options are: sum, mean, median. When not set, mean is used by default."
     )
     group.add_argument(
         "--compare_columns", "-cc", type=str,
         help="Select the column from the metadata file which will be used to compare the intensities of the different categories."
+    )
+    group.add_argument(
+        "--overlapping_intensities", "-oi", type=str, choices=aggregation_methods,
+        help="Select the peptide intensity aggregation when there are overlapping different peptides with (different) intensities on one node/edge."
+        "Accepted options are: sum, mean, median. When not set, all peptide intensities are displayed like this: XX, ..., ZZ"
+        "Not the same as --multiple_peptides."
     )
 
 
