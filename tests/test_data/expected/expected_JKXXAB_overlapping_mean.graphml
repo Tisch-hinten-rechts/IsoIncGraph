@@ -32,7 +32,7 @@
       <data key="v_position">2</data>
       <data key="v_accession">JKXXAB</data>
       <data key="v_peptides">AB, B, BC</data>
-      <data key="v_intensity">51.67</data>
+      <data key="v_intensity">51.666666666666664</data>
     </node>
     <node id="n3">
       <data key="v_aminoacid">C</data>

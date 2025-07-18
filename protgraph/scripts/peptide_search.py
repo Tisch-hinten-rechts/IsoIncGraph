@@ -1,5 +1,5 @@
 from functools import lru_cache
-from math import trunc
+from statistics import mean, median
 import igraph as ig
 import pandas as pd
 from typing import List, Optional, Tuple
@@ -114,7 +114,15 @@ def metadata_to_string(metadata):
         metadata = "(" + metadata + ")"
     return str(metadata)
 
-def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_peptides, count):
+def aggregate(iterable, method):
+    if method == "sum":
+        return str(sum(iterable))
+    if method == "median":
+        return str(median(iterable))
+    if method == "mean":
+        return  str(mean(iterable))
+
+def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_peptides, count, aggregation_method):
     node_peptides = dict()
     edge_peptides = dict()
     for peptide in peptides:
@@ -168,9 +176,15 @@ def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_pepti
         graph.vs[key]["peptides"] = peptide_string
         if show_intensity:
             intensity = []
-            for peptide in peptides:
-                if peptide in metadata.keys():
-                    intensity.append(metadata_to_string(metadata[peptide]))
+            if aggregation_method:
+                for peptide in peptides:
+                    if peptide in metadata.keys(): 
+                        intensity.append(metadata[peptide])
+                intensity = [aggregate(intensity, aggregation_method)]
+            else:
+                for peptide in peptides:
+                    if peptide in metadata.keys(): 
+                        intensity.append(metadata_to_string(metadata[peptide]))
             intensity_string = ", ".join(intensity)
             graph.vs[key]["intensity"] = intensity_string
     if "_start_" in metadata.keys():

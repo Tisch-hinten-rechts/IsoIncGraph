@@ -288,6 +288,12 @@ def add_graph_generation(group):
         "--compare_columns", "-cc", type=str,
         help="Select the column from the metadata file which will be used to compare the intensities of the different categories."
     )
+    group.add_argument(
+        "--overlapping_intensities", "-oi", type=str, choices=aggregation_methods,
+        help="Select the peptide intensity aggregation when there are overlapping different peptides with (different) intensities on one node/edge."
+        "Accepted options are: sum, mean, median. When not set, all peptide intensities are displayed like this: XX, ..., ZZ"
+        "Not the same as --multiple_peptides."
+    )
 
 
 def add_statistics(group):
