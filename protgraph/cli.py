@@ -269,8 +269,7 @@ def add_graph_generation(group):
     )
     group.add_argument(
         "--metadata_file", "-mf", type=check_if_file_exists,
-        help="Set a csv file with metadata information for the peptide file. It should have the format: Sample,Column1,...,Column2"
-        "The column "
+        help="Set a csv file with metadata information for the peptide file. It should have the format: Sample,Column1,...,ColumnX"
     )
     group.add_argument(
         "--intensity", "-int", default=False, action="store_true",
