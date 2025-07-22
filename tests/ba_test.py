@@ -277,7 +277,6 @@ class FunctionalTest(unittest.TestCase):
         args = protgraph.parse_args(case["extra_args"] + self.procs_num + input_paths)
         protgraph.prot_graph(**args)
 
-        print(output_path)
         self.assertTrue(os.path.exists(output_path), "Output file not created.")
         self.assertTrue(
             filecmp.cmp(output_path, expected_path, shallow=False),

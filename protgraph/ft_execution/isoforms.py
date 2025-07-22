@@ -20,9 +20,6 @@ def execute_isoform(graph, generic_feature, beginning="("):
     if vertices_after is None:
         return
 
-    print("liste?",vertices_after)
-    print("hallo", vertices_after[0], type(vertices_after[0]))
-
     text = generic_feature.qualifiers["note"]
     affected_isoforms = get_isoforms(text)
 
