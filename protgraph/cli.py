@@ -280,7 +280,7 @@ def add_graph_generation(group):
     ]
     group.add_argument(
         "--multiple_intensities", "-mi", type=str, choices=aggregation_methods, default=aggregation_methods[0],
-        help="Select the peptide intensity aggregation when there are multiple peptides with different intensities in the peptide file."
+        help="Select the peptide intensity aggregation when there are multiple instances of the same peptide with different intensities in the peptide file."
         "Accepted options are: sum, mean, median. When not set, mean is used by default."
     )
     group.add_argument(
@@ -292,6 +292,7 @@ def add_graph_generation(group):
         help="Select the peptide intensity aggregation when there are overlapping different peptides with (different) intensities on one node/edge."
         "Accepted options are: sum, mean, median. When not set, all peptide intensities are displayed like this: XX, ..., ZZ"
         "Not the same as --multiple_peptides."
+        "Currently does not support the flag --compare_column"
     )
 
 
