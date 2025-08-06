@@ -187,6 +187,13 @@ class FunctionalTest(unittest.TestCase):
                 "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pep", "A", "-of", "JKXXAA_peptide", "-cpep"],
             },
             {
+                "name": "Count-Merge",
+                "input_files": ["JKXXAB.txt"],
+                "output_file": "JKXXAB_count.graphml",
+                "expected": "expected_JKXXAB_count.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pep", "ABC", "-of", "JKXXAB_count", "-cpep"],
+            },
+            {
                 "name": "Count-Edge",
                 "input_files": ["JKXXAB.txt"],
                 "output_file": "JKXXAB_overlapping.graphml",
@@ -262,6 +269,13 @@ class FunctionalTest(unittest.TestCase):
                 "output_file": "JKXXAB_intensity_overlapping_mean.graphml",
                 "expected": "expected_JKXXAB_overlapping_mean.graphml",
                 "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_overlapping_three.csv","-of", "JKXXAB_intensity_overlapping_mean", "-int", "-oi", "mean"],
+            },
+            {
+                "name": "Intensity-Merge",
+                "input_files": ["JKXXAB.txt"],
+                "output_file": "JKXXAB_intensity_merge.graphml",
+                "expected": "expected_JKXXAB_intensity_merge.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/continues_peptide.csv","-of", "JKXXAB_intensity_merge", "-int"],
             },
         ]
 

@@ -169,11 +169,12 @@ def _append_edge_list_missing(graph, text, generic_feature, edge_list, v_before,
     affected_isoforms = get_isoforms(text)
     affected_isoforms = "".join(affected_isoforms)
     affected_isoforms = affected_isoforms.replace(", ", "", 1)
-    # TODO is such a combination enough?
+
     # Here we iterate over all possiblites over two pairs of nodes and its edges
     for aa_in_list, aa_out_list in zip(v_before, v_after):
         for aa_in in aa_in_list:
             for aa_edge_in in list(graph.es.select(_target=aa_in)):  # Get all incoming edges
+                #TODO: hier könnten man diesen Replace-Into-Missing Fall minimal abfangen
                 for aa_out in aa_out_list:
                     for aa_edge_out in list(graph.es.select(_source=aa_out)):  # Get all outgoing edges
                         # Add corresponding edges and the qualifiers information
