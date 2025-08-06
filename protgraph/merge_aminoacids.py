@@ -138,6 +138,8 @@ def merge_aminoacids(graph_entry):
         m_position = sorted_nodes[0]["position"]  # Retrieve only the first position
         m_accession = _get_single_set_element(sorted_nodes, "accession")  # Get the ONLY accession
         m_peptides = sorted_nodes[0].get("peptides")  # Peptides should be the same for all nodes per chain
+        m_count = sorted_nodes[0].get("count")  # count should be the same for all nodes per chain
+        m_intensity = sorted_nodes[0].get("intensity")
         # Now the attributes in nodes, which may be present
         m_isoform_accession = _get_single_set_element(sorted_nodes, "isoform_accession")  # Get the ONLY iso_accession
         m_isoform_position = sorted_nodes[0]["isoform_position"] if "isoform_position" in sorted_nodes[0] else None
@@ -187,14 +189,33 @@ def merge_aminoacids(graph_entry):
         else:
             m_peptides_edge = None
 
+        if "count" in sorted_nodes_attrs[0]:
+            m_count_edge = [
+                y
+                for x in sorted_edges
+                if x.attributes().get("count") is not None
+                for y in (x.attributes()["count"] if isinstance(x.attributes()["count"], list) else [x.attributes()["count"]])
+            ]
+        else:
+            m_count_edge = None
+        
+        if "intensity" in sorted_nodes_attrs[0]:
+            m_intensity_edge = [
+                y
+                for x in sorted_edges
+                if x.attributes().get("intensity") is not None
+                for y in (x.attributes()["intensity"] if isinstance(x.attributes()["intensity"], list) else [x.attributes()["intensity"]])
+            ]
+        else:
+            m_intensity_edge = None
 
         # Generate new node/edge dict attrs
         # Here we set all available! (So this may need to be appended for new attrs)
         new_node_attrs = dict(
             accession=m_accession, isoform_accession=m_isoform_accession, position=m_position,
-            isoform_position=m_isoform_position, aminoacid=m_aminoacid, delta_mass=m_delta_mass, peptides=m_peptides
+            isoform_position=m_isoform_position, aminoacid=m_aminoacid, delta_mass=m_delta_mass, peptides=m_peptides, count=m_count, intensity=m_intensity
         )
-        new_edge_attrs = dict(cleaved=m_cleaved, qualifiers=m_qualifiers, isoforms=m_isoforms, generic=m_generic, peptides=m_peptides_edge)
+        new_edge_attrs = dict(cleaved=m_cleaved, qualifiers=m_qualifiers, isoforms=m_isoforms, generic=m_generic, peptides=m_peptides_edge, count=m_count_edge, intensity=m_intensity_edge)
 
         # Save merged information back to list
         merged_nodes.append(
@@ -222,6 +243,8 @@ def merge_aminoacids(graph_entry):
     _add_node_attributes(graph_entry, merged_nodes, cur_node_count, "accession")
     # Then add the possibly available attributes
     _add_node_attributes(graph_entry, merged_nodes, cur_node_count, "peptides")
+    _add_node_attributes(graph_entry, merged_nodes, cur_node_count, "count")
+    _add_node_attributes(graph_entry, merged_nodes, cur_node_count, "intensity")
     _add_node_attributes(graph_entry, merged_nodes, cur_node_count, "isoform_accession")
     _add_node_attributes(graph_entry, merged_nodes, cur_node_count, "isoform_position")
     _add_node_attributes(graph_entry, merged_nodes, cur_node_count, "delta_mass")
@@ -272,6 +295,8 @@ def merge_aminoacids(graph_entry):
     _add_edge_attributes(graph_entry, new_edges_with_attrs, e_count, "isoforms")
     _add_edge_attributes(graph_entry, new_edges_with_attrs, e_count, "generic")
     _add_edge_attributes(graph_entry, new_edges_with_attrs, e_count, "peptides")
+    _add_edge_attributes(graph_entry, new_edges_with_attrs, e_count, "count")
+    _add_edge_attributes(graph_entry, new_edges_with_attrs, e_count, "intensity")
 
 
     #####################################
