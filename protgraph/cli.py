@@ -263,7 +263,7 @@ def add_graph_generation(group):
     )
     group.add_argument(
         "--peptide_file", "-pf", type=check_if_file_exists,
-        help="Set a csv file with peptide and intensity information. It should have the format: Sample,Protein ID,Sequence,Intensity,PEP"
+        help="Set a csv file with peptide and intensity information. It should have at least the following columns: Sample,Protein ID,Sequence,Intensity"
         "Only the peptides that belong to the protein (including isoforms) from the EMBL-Entry will searched on the graph, analog to the use of multiple --peptide flags."
         "Intensity will not be displayed automatically, use the --intensity flag for this."
     )
@@ -276,12 +276,14 @@ def add_graph_generation(group):
         help="Set if the intensities from the peptide file should be dispayled on the graph."
     )
     aggregation_methods = [
-        "mean", "sum", "median"
+        "mean", "sum", "median", "lmedian", "hmedian"
     ]
     group.add_argument(
         "--multiple_intensities", "-mi", type=str, choices=aggregation_methods, default=aggregation_methods[0],
         help="Select the peptide intensity aggregation when there are multiple instances of the same peptide with different intensities in the peptide file."
-        "Accepted options are: sum, mean, median. When not set, mean is used by default."
+        "Accepted options are: sum, mean, median, lmedian, hmedian. When not set, mean is used by default."
+        "lmedian functions like median for an odd amount of values, but will take the lower of the two middle values when there is an even amount."
+        "hmedian will take the higher ot the two middle values when there is an even amount."
     )
     group.add_argument(
         "--compare_columns", "-cc", type=str,
@@ -291,6 +293,8 @@ def add_graph_generation(group):
         "--overlapping_intensities", "-oi", type=str, choices=aggregation_methods,
         help="Select the peptide intensity aggregation when there are overlapping different peptides with (different) intensities on one node/edge."
         "Accepted options are: sum, mean, median. When not set, all peptide intensities are displayed like this: XX, ..., ZZ"
+        "lmedian functions like median for an odd amount of values, but will take the lower of the two middle values when there is an even amount."
+        "hmedian will take the higher ot the two middle values when there is an even amount."
         "Not the same as --multiple_peptides."
         "Currently does not support the flag --compare_column"
     )

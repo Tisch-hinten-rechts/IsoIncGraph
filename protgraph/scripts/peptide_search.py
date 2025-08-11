@@ -1,5 +1,5 @@
 from functools import lru_cache
-from statistics import mean, median
+from statistics import mean, median, median_low, median_high
 import igraph as ig
 import pandas as pd
 from typing import List, Optional, Tuple
@@ -91,7 +91,7 @@ def get_peptides(protein_id, **kwargs):
                 print("Please specify a metadata file")
             grouped = grouped.merge(meta_df, on="Sample")
             modified = pd.DataFrame()
-            modified = grouped.groupby(["Sequence", kwargs["compare_columns"]])["Intensity"].agg(kwargs["multiple_intensities"])
+            modified = grouped.groupby(["Sequence", kwargs["compare_columns"]])["Intensity"].agg(aggregate(kwargs["multiple_intensities"]))
             modified = modified.unstack(level=kwargs["compare_columns"])
             peptides = modified.index
             metadata = {
@@ -100,7 +100,7 @@ def get_peptides(protein_id, **kwargs):
             }
             metadata["_start_"] = modified.columns  #save info in what order
         else:
-            modified = grouped.groupby(["Sequence"])["Intensity"].agg(kwargs["multiple_intensities"])
+            modified = grouped.groupby(["Sequence"])["Intensity"].agg(aggregate(kwargs["multiple_intensities"]))
             peptides = modified.index
             metadata = modified.to_dict()
     else: 
@@ -114,13 +114,18 @@ def metadata_to_string(metadata):
         metadata = "(" + metadata + ")"
     return str(metadata)
 
-def aggregate(iterable, method):
-    if method == "sum":
-        return str(sum(iterable))
-    if method == "median":
-        return str(median(iterable))
-    if method == "mean":
-        return  str(mean(iterable))
+def aggregate(method):
+    match method:
+        case "sum":
+            return sum
+        case "median":
+            return median
+        case "mean":
+            return mean
+        case "lmedian":
+            return median_low
+        case "hmedian":
+            return median_high
 
 def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_peptides, count, aggregation_method):
     node_peptides = dict()
@@ -180,7 +185,7 @@ def add_peptides_to_graph(graph, peptides, metadata, show_intensity, merge_pepti
                 for peptide in peptides:
                     if peptide in metadata.keys(): 
                         intensity.append(metadata[peptide])
-                intensity = [aggregate(intensity, aggregation_method)]
+                intensity = [str(aggregate(aggregation_method)(intensity))]
             else:
                 for peptide in peptides:
                     if peptide in metadata.keys(): 
