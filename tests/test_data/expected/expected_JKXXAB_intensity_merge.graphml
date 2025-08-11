@@ -32,7 +32,7 @@
       <data key="v_position">1</data>
       <data key="v_accession">JKXXAB</data>
       <data key="v_peptides">ABC</data>
-      <data key="v_intensity">1.0</data>
+      <data key="v_intensity">1</data>
     </node>
     <edge source="n0" target="n2">
       <data key="e_isoforms">canonical</data>

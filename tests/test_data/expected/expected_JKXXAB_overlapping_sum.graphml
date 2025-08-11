@@ -25,21 +25,21 @@
       <data key="v_position">1</data>
       <data key="v_accession">JKXXAB</data>
       <data key="v_peptides">AB</data>
-      <data key="v_intensity">51.0</data>
+      <data key="v_intensity">51</data>
     </node>
     <node id="n2">
       <data key="v_aminoacid">B</data>
       <data key="v_position">2</data>
       <data key="v_accession">JKXXAB</data>
       <data key="v_peptides">AB, B, BC</data>
-      <data key="v_intensity">155.0</data>
+      <data key="v_intensity">155</data>
     </node>
     <node id="n3">
       <data key="v_aminoacid">C</data>
       <data key="v_position">3</data>
       <data key="v_accession">JKXXAB</data>
       <data key="v_peptides">BC</data>
-      <data key="v_intensity">52.0</data>
+      <data key="v_intensity">52</data>
     </node>
     <node id="n4">
       <data key="v_aminoacid">__end__</data>
@@ -56,12 +56,12 @@
     <edge source="n1" target="n2">
       <data key="e_isoforms">canonical</data>
       <data key="e_peptides">AB</data>
-      <data key="e_intensity">51.0</data>
+      <data key="e_intensity">51</data>
     </edge>
     <edge source="n2" target="n3">
       <data key="e_isoforms">canonical</data>
       <data key="e_peptides">BC</data>
-      <data key="e_intensity">52.0</data>
+      <data key="e_intensity">52</data>
     </edge>
     <edge source="n3" target="n4">
       <data key="e_isoforms">canonical</data>
