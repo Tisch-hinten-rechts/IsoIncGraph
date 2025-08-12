@@ -291,6 +291,20 @@ class FunctionalTest(unittest.TestCase):
                 "expected": "expected_JKXXAA_high_median.graphml",
                 "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_column.csv","-of", "JKXXAA_hmedian", "-mi", "hmedian", "-int"],
             },
+            {
+                "name": "Intensity-Overlapping-Low-Median",
+                "input_files": ["JKXXAB.txt"],
+                "output_file": "JKXXAB_intensity_overlapping_low_median.graphml",
+                "expected": "expected_JKXXAB_overlapping_low_median.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_overlapping.csv","-of", "JKXXAB_intensity_overlapping_low_median", "-int", "-oi", "lmedian"],
+            },
+            {
+                "name": "Intensity-Overlapping-High-Median",
+                "input_files": ["JKXXAB.txt"],
+                "output_file": "JKXXAB_intensity_overlapping_high_median.graphml",
+                "expected": "expected_JKXXAB_overlapping_high_median.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_overlapping.csv","-of", "JKXXAB_intensity_overlapping_high_median", "-int", "-oi", "hmedian"],
+            },
         ]
 
     def tearDown(self):
