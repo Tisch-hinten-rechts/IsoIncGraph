@@ -71,8 +71,8 @@ def _sort_entry_features(entry):
 
 def _include_spefic_ft(graph, ft_type, method, sorted_features, ft_dict):
     """ Execute features individually """
-    num_of_feature_type = 0 if ft_type in ft_dict else None
-    if ft_type in sorted_features and ft_type in ft_dict:
+    num_of_feature_type = 0 if ft_dict[ft_type] else None
+    if ft_type in sorted_features and ft_dict[ft_type]:
         num_of_feature_type = len(sorted_features[ft_type])
         for f in sorted_features[ft_type]:
             method(graph, f)
