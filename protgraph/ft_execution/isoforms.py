@@ -136,7 +136,8 @@ def _append_edge_list_chain(
             cur_edges = graph.ecount()
             for idx, n in enumerate(y_idcs[:-1]):
                 graph.add_edges([(n, y_idcs[idx + 1])])
-            #TODO: use cur edges like in the function above, create a list of the ingoing isofrom attributes with  the help of the loop under this.
+
+            graph.es[cur_edges:]["isoforms"] = [affected_isoforms] * (graph.ecount() - cur_edges)
 
             # Get the first and last node index
             first_node, last_node = y_idcs[0], y_idcs[-1]
