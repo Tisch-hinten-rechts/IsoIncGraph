@@ -76,7 +76,7 @@ def get_peptides(protein_id, **kwargs):
     peptides = []
     metadata = {}
     if kwargs["peptide_file"]:
-        df = pd.read_csv(kwargs["peptide_file"])
+        df = pd.read_csv(kwargs["peptide_file"]).fillna(value = {"Intensity": 0})
         df["Normalized Protein ID"] = df["Protein ID"].str.split("-").str[0] #sometimes the protein ids are for a specific isoform (eg. P10636-2), we only want the protein id
         normalized_isoforms = df.groupby("Normalized Protein ID")
         try:
