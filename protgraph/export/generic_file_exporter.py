@@ -24,7 +24,6 @@ class GenericFileExporter(AExporter):
     def export(self, prot_graph, _, **kwargs):
         if self.flat:
             accession = prot_graph.vs["accession"][0]
-            print(not kwargs["output_file"])
             self.export_function(prot_graph, os.path.join(self.out_folder, (accession if not kwargs["output_file"] else kwargs["output_file"])))
         else:
             accession = prot_graph.vs["accession"][0]

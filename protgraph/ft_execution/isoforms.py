@@ -24,19 +24,11 @@ def execute_isoform(graph, generic_feature, beginning="("):
     affected_isoforms = get_isoforms(text)
 
     # Remove isoforms that don't belong to the current edges from their edge attributes
+    # First Part: Get all vertices and their positions
     flat_vertices_after = [item[0] for item in vertices_after]
     flat_vertices_before = [item[0] for item in vertices_before]
     current_vertices = flat_vertices_before
-    while True:
-        update_edge_isoforms(graph, current_vertices, affected_isoforms, IN)
-        if current_vertices == flat_vertices_after: break
-        next_positions = [v["position"] + 1 for v in current_vertices if "position" in v.attributes()]
-        current_vertices = list(graph.vs.select(position_in=next_positions))
-
-    # ...- X               X is node from isoform, A & B are canonical sequence
-    #        \ 
-    # ...- A - B           Finished all edges upto a, now only edge a - b is left.
-    update_edge_isoforms(graph, flat_vertices_after, affected_isoforms, OUT)
+    
 
     # Now we check if we skip or add nodes
     edge_list = []  # Here we append all edges, which should be added at the end
@@ -48,6 +40,20 @@ def execute_isoform(graph, generic_feature, beginning="("):
         _append_edge_list_chain(
             graph, text, generic_feature, edge_list, vertices_before, vertices_after, beginning=beginning
         )
+
+    # Remove isoforms that don't belong to the current edges from their edge attributes
+    # Second Part: Actually remove them
+    # need to split this in two parts because we want to check if affected isoforms match incoming edges in the _append_edge_list functions above
+    while True:
+        update_edge_isoforms(graph, current_vertices, affected_isoforms, IN)
+        if current_vertices == flat_vertices_after: break
+        next_positions = [v["position"] + 1 for v in current_vertices if "position" in v.attributes()]
+        current_vertices = list(graph.vs.select(position_in=next_positions))
+
+    # ...- X               X is node from isoform, A & B are canonical sequence
+    #        \ 
+    # ...- A - B           Finished all edges upto a, now only edge a - b is left.
+    update_edge_isoforms(graph, flat_vertices_after, affected_isoforms, OUT)
 
     # Finally bulk add of the remaining edges
     cur_edges = graph.ecount()
@@ -73,7 +79,6 @@ def update_edge_isoforms(graph, vertices, affected_isoforms, mode):
         for edge_id in incoming_edges:
             edge = graph.es[edge_id]
             current_isoforms = edge["isoforms"]
-
             new_isoforms = transform_isoforms(current_isoforms, affected_isoforms)
             edge["isoforms"] = new_isoforms
 
@@ -109,8 +114,8 @@ def _append_edge_list_chain(
 ):
     # Get to be replaced amino_acids
     y_s = get_content(text, beginning, delimiter)
-    affected_isoforms = get_isoforms(text)
-    affected_isoforms = "".join(affected_isoforms)
+    affected_isoforms_list = get_isoforms(text)
+    affected_isoforms = "".join(affected_isoforms_list)
     affected_isoforms = affected_isoforms.replace(", ", "", 1)
     # Generalizing: It can reference multiple substitutions
     for y in y_s.split(","):
@@ -145,12 +150,21 @@ def _append_edge_list_chain(
             # And add then to the edges list (to connect them to the rest of the graph)
             for aa_in in aa_in_list:
                 for aa_edge_in in list(graph.es.select(_target=aa_in)):  # Get all incoming edges
-                    qualifiers = [*_get_qualifiers(aa_edge_in), generic_feature]
-                    isoforms = affected_isoforms
+                    #only want to continue paths that the affected isoforms actually travelled up to this point
+                    matches = [isoform for isoform in affected_isoforms_list if isoform in (", " + aa_edge_in["isoforms"])]
+                    if len(matches) > 0:
+                        qualifiers = [*_get_qualifiers(aa_edge_in), generic_feature]
+                        affected_isoforms = "".join(matches)
+                        affected_isoforms = affected_isoforms.replace(", ", "", 1)
+                        isoforms = affected_isoforms
 
-                    # Include all desired edge attributes in a dict (or list, depending on your later use)
-                    edge_attrs = {"qualifiers": qualifiers, "isoforms": isoforms}
-                    edge_list.append(((aa_edge_in.source, first_node), edge_attrs))
+                        # Include all desired edge attributes in a dict (or list, depending on your later use)
+                        edge_attrs = {"qualifiers": qualifiers, "isoforms": isoforms}
+                        edge_list.append(((aa_edge_in.source, first_node), edge_attrs))
+
+                        #if affected_isoforms are the same as the incoming edge, the incoming edge would represent a wrong diverging to the canonical track and thus will be deleted
+                        if affected_isoforms == aa_edge_in["isoforms"]:
+                            aa_edge_in.delete()
 
             for aa_out in aa_out_list:
                 for aa_edge_out in list(graph.es.select(_source=aa_out)):  # Get all outgoing edges
@@ -167,31 +181,35 @@ def _append_edge_list_missing(graph, text, generic_feature, edge_list, v_before,
     [__stop_node__] = graph.vs.select(aminoacid="__end__")
     # A sequence is missing! Just append an edge and its information
 
-    affected_isoforms = get_isoforms(text)
-    affected_isoforms = "".join(affected_isoforms)
-    affected_isoforms = affected_isoforms.replace(", ", "", 1)
-
+    affected_isoforms_list = get_isoforms(text)
     # Here we iterate over all possiblites over two pairs of nodes and its edges
     for aa_in_list, aa_out_list in zip(v_before, v_after):
         for aa_in in aa_in_list:
             for aa_edge_in in list(graph.es.select(_target=aa_in)):  # Get all incoming edges
-                #TODO: hier könnten man diesen Replace-Into-Missing Fall minimal abfangen
-                for aa_out in aa_out_list:
-                    for aa_edge_out in list(graph.es.select(_source=aa_out)):  # Get all outgoing edges
-                        # Add corresponding edges and the qualifiers information
-                        # for that edge (At least the generic feature)
-                        # Only if they not point to start_end directly! (#special case e.g. in P49782)
-                        if aa_edge_in.source != __start_node__.index or aa_edge_out.target != __stop_node__.index:
-                            qualifiers = [*_get_qualifiers(aa_edge_in), generic_feature]
-                            isoforms = affected_isoforms
+                #only want to continue paths that the affected isoforms actually travelled up to this point
+                matches = [isoform for isoform in affected_isoforms_list if isoform in (", " + aa_edge_in["isoforms"])] 
+                if len(matches) > 0:
+                    for aa_out in aa_out_list:
+                        for aa_edge_out in list(graph.es.select(_source=aa_out)):  # Get all outgoing edges
+                            # Add corresponding edges and the qualifiers information
+                            # for that edge (At least the generic feature)
+                            # Only if they not point to start_end directly! (#special case e.g. in P49782)
+                            if aa_edge_in.source != __start_node__.index or aa_edge_out.target != __stop_node__.index:
+                                qualifiers = [*_get_qualifiers(aa_edge_in), generic_feature]
+                                affected_isoforms = "".join(matches)
+                                affected_isoforms = affected_isoforms.replace(", ", "", 1)
+                                isoforms = affected_isoforms
 
-                            edge_attrs = {"qualifiers": qualifiers, "isoforms": isoforms}
-                            edge_list.append(
-                                (
-                                    (aa_edge_in.source, aa_edge_out.target),
-                                    edge_attrs,
+                                edge_attrs = {"qualifiers": qualifiers, "isoforms": isoforms}
+                                edge_list.append(
+                                    (
+                                        (aa_edge_in.source, aa_edge_out.target),
+                                        edge_attrs,
+                                    )
                                 )
-                            )
+                                #if affected_isoforms are the same as the incoming edge, the incoming edge would represent a wrong diverging to the canonical track and thus will be deleted
+                                if affected_isoforms == aa_edge_in["isoforms"]:
+                                    aa_edge_in.delete()
 
 
 def _get_all_vertices_before_after(graph, aa_before: int, aa_after: int, reference: str):

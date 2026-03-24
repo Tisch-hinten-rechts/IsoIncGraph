@@ -305,6 +305,48 @@ class FunctionalTest(unittest.TestCase):
                 "expected": "expected_JKXXAB_overlapping_high_median.graphml",
                 "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip", "-sg", "-pf", "tests/test_data/input/peptide_overlapping.csv","-of", "JKXXAB_intensity_overlapping_high_median", "-int", "-oi", "hmedian"],
             },
+            {
+                "name": "No-Edge-Incompatible-Isoforms",
+                "input_files": ["JKXXIJ.txt"],
+                "output_file": "JKXXIJ.graphml",
+                "expected": "expected_JKXXIJ.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
+            },
+            {
+                "name": "Merge-Isoform-VARSEQS",
+                "input_files": ["JKXXIK.txt"],
+                "output_file": "JKXXIK.graphml",
+                "expected": "expected_JKXXIK.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
+            },
+            {
+                "name": "Merge-Isoform-With-Diverging",
+                "input_files": ["JKXXIL.txt"],
+                "output_file": "JKXXIL.graphml",
+                "expected": "expected_JKXXIL.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
+            },
+            {
+                "name": "No-Edge-Incompatible-Isoforms-Missing",
+                "input_files": ["JKXXIJ-M.txt"],
+                "output_file": "JKXXIJ-M.graphml",
+                "expected": "expected_JKXXIJ-M.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
+            },
+            {
+                "name": "Merge-Isoform-VARSEQS-Missing",
+                "input_files": ["JKXXIK-M.txt"],
+                "output_file": "JKXXIK-M.graphml",
+                "expected": "expected_JKXXIK-M.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
+            },
+            {
+                "name": "Merge-Isoform-With-Diverging-Missing",
+                "input_files": ["JKXXIL-M.txt"],
+                "output_file": "JKXXIL-M.graphml",
+                "expected": "expected_JKXXIL-M.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
+            },
         ]
 
     def tearDown(self):
