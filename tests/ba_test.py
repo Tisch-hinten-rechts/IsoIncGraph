@@ -347,6 +347,13 @@ class FunctionalTest(unittest.TestCase):
                 "expected": "expected_JKXXIL-M.graphml",
                 "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
             },
+            {
+                "name": "Init-Met",
+                "input_files": ["JKXXMA.txt"],
+                "output_file": "JKXXMA.graphml",
+                "expected": "expected_JKXXMA.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
+            },
         ]
 
     def tearDown(self):
