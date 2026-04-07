@@ -77,12 +77,41 @@ def _digest_via_trypsin(graph):
         qualifiers_info = [
             k["qualifiers"] for k in k_s_edges_remaining + r_s_edges_remaining
         ] + [None]*len(cleaved_idcs)
-
+    if "isoforms" in graph.es[0].attributes():
+        isoforms_info = [
+            k["isoforms"] for k in k_s_edges_remaining + r_s_edges_remaining
+        ]
+    if "init_met" in graph.es[0].attributes():
+        init_met_info = [
+            k["init_met"] for k in k_s_edges_remaining + r_s_edges_remaining
+        ]
+    if "signal" in graph.es[0].attributes():
+        signal_info = [
+            k["signal"] for k in k_s_edges_remaining + r_s_edges_remaining
+        ]
+    if "cleaved_generic" in graph.es[0].attributes():
+        cleaved_feature_info = [
+            k["cleaved_generic"] for k in k_s_edges_remaining + r_s_edges_remaining
+        ]
+    if "generic" in graph.es[0].attributes():
+        generic_info = [
+            k["generic"] for k in k_s_edges_remaining + r_s_edges_remaining
+        ]
     # Add the newly created edges to the graph
     e_count = graph.ecount()
     graph.add_edges(trypsin_in + trypsin_out)
     if "qualifiers" in graph.es[0].attributes():
         graph.es[e_count:]["qualifiers"] = qualifiers_info
+    if "isoforms" in graph.es[0].attributes():
+        graph.es[e_count:]["isoforms"] = isoforms_info + isoforms_info #twice, since edges from start and then to end are added
+    if "init_met" in graph.es[0].attributes():
+        graph.es[e_count:]["init_met"] = init_met_info + init_met_info
+    if "signal" in graph.es[0].attributes():
+        graph.es[e_count:]["signal"] = signal_info + signal_info
+    if "cleaved_generic" in graph.es[0].attributes():
+        graph.es[e_count:]["cleaved_generic"] = cleaved_feature_info + cleaved_feature_info
+    if "generic" in graph.es[0].attributes():
+        graph.es[e_count:]["generic"] = generic_info + generic_info
 
     # Return the number of cleaved edges
     return len(cleaved_idcs)
@@ -139,12 +168,42 @@ def _digest_via_glu_c(graph):
         qualifiers_info = [
             k["qualifiers"] for k in d_s_edges_remaining + e_s_edges_remaining
         ] + [None]*len(cleaved_idcs)
+    if "isoforms" in graph.es[0].attributes():
+        isoforms_info = [
+            k["isoforms"] for k in d_s_edges_remaining + e_s_edges_remaining
+        ]
+    if "init_met" in graph.es[0].attributes():
+        init_met_info = [
+            k["init_met"] for k in d_s_edges_remaining + e_s_edges_remaining
+        ]
+    if "signal" in graph.es[0].attributes():
+        signal_info = [
+            k["signal"] for k in d_s_edges_remaining + e_s_edges_remaining
+        ]
+    if "cleaved_generic" in graph.es[0].attributes():
+        cleaved_feature_info = [
+            k["cleaved_generic"] for k in d_s_edges_remaining + e_s_edges_remaining
+        ]
+    if "generic" in graph.es[0].attributes():
+        generic_info = [
+            k["generic"] for k in d_s_edges_remaining + e_s_edges_remaining
+        ]
 
     # Add the newly created edges to the graph
     e_count = graph.ecount()
     graph.add_edges(gluc_in + gluc_out)
     if "qualifiers" in graph.es[0].attributes():
         graph.es[e_count:]["qualifiers"] = qualifiers_info
+    if "isoforms" in graph.es[0].attributes():
+        graph.es[e_count:]["isoforms"] = isoforms_info + isoforms_info #twice, since edges from start and then to end are added
+    if "init_met" in graph.es[0].attributes():
+        graph.es[e_count:]["init_met"] = init_met_info + init_met_info
+    if "signal" in graph.es[0].attributes():
+        graph.es[e_count:]["signal"] = signal_info + signal_info
+    if "cleaved_generic" in graph.es[0].attributes():
+        graph.es[e_count:]["cleaved_generic"] = cleaved_feature_info + cleaved_feature_info
+    if "generic" in graph.es[0].attributes():
+        graph.es[e_count:]["generic"] = generic_info + generic_info
 
     # Return the number of cleaved edges
     return len(cleaved_idcs)
@@ -176,6 +235,26 @@ def _digest_via_full(graph):
     end_out_edges = [(x.source, __end_node__.index) for x in all_edges_wo_start_end]
     if "qualifiers" in graph.es[0].attributes():
         qualifiers = [x["qualifiers"] for x in all_edges_wo_start_end] + [None] * len(all_edges_wo_start_end)
+    if "isoforms" in graph.es[0].attributes():
+        isoforms_info = [
+            k["isoforms"] for k in all_edges_wo_start_end
+        ]
+    if "init_met" in graph.es[0].attributes():
+        init_met_info = [
+            k["init_met"] for k in all_edges_wo_start_end
+        ]
+    if "signal" in graph.es[0].attributes():
+        signal_info = [
+            k["signal"] for k in all_edges_wo_start_end
+        ]
+    if "cleaved_generic" in graph.es[0].attributes():
+        cleaved_feature_info = [
+            k["cleaved_generic"] for k in all_edges_wo_start_end
+        ]
+    if "generic" in graph.es[0].attributes():
+        generic_info = [
+            k["generic"] for k in all_edges_wo_start_end
+        ]
 
     # Add the edges to the graph
     # Add the newly created edges to the graph
@@ -183,6 +262,16 @@ def _digest_via_full(graph):
     graph.add_edges(start_in_edges + end_out_edges)
     if "qualifiers" in graph.es[0].attributes():
         graph.es[e_count:]["qualifiers"] = qualifiers
+    if "isoforms" in graph.es[0].attributes():
+        graph.es[e_count:]["isoforms"] = isoforms_info + isoforms_info #twice, since edges from start and then to end are added
+    if "init_met" in graph.es[0].attributes():
+        graph.es[e_count:]["init_met"] = init_met_info + init_met_info
+    if "signal" in graph.es[0].attributes():
+        graph.es[e_count:]["signal"] = signal_info + signal_info
+    if "cleaved_generic" in graph.es[0].attributes():
+        graph.es[e_count:]["cleaved_generic"] = cleaved_feature_info + cleaved_feature_info
+    if "generic" in graph.es[0].attributes():
+        graph.es[e_count:]["generic"] = generic_info + generic_info
 
     # Return the number of cleaved edges
     return len(all_edges_wo_start_end)

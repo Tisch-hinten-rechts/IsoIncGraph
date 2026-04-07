@@ -389,6 +389,13 @@ class FunctionalTest(unittest.TestCase):
                 "expected": "expected_JKXXPI.graphml",
                 "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
             },
+            {
+                "name": "Digestion-Trypsin",
+                "input_files": ["JKXXDA.txt"],
+                "output_file": "JKXXDA.graphml",
+                "expected": "expected_JKXXDA.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "trypsin", "--no_collapsing_edges"],
+            },
         ]
 
     def tearDown(self):

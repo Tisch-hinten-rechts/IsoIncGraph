@@ -14,7 +14,7 @@ def old_execute_signal(graph, signal_feature):
     Nodes: <None>
     Edges: "qualifiers" ( -> adds SIGNAL)
     """
-    print(signal_feature)
+
     if isinstance(signal_feature.location.end, UnknownPosition):
         # The Position of the end is not known. Therefore we skip
         # this entry simply. It does not contain any useful information
@@ -101,7 +101,7 @@ def execute_signal(graph, signal_feature):
     Nodes: <None>
     Edges: "qualifiers" ( -> adds SIGNAL)
     """
-    print(signal_feature)
+
     if isinstance(signal_feature.location.end, UnknownPosition):
         # The Position of the end is not known. Therefore we skip
         # this entry simply. It does not contain any useful information
