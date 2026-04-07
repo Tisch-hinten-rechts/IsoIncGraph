@@ -354,6 +354,13 @@ class FunctionalTest(unittest.TestCase):
                 "expected": "expected_JKXXMA.graphml",
                 "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
             },
+            {
+                "name": "Signal",
+                "input_files": ["JKXXSA.txt"],
+                "output_file": "JKXXSA.graphml",
+                "expected": "expected_JKXXSA.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
+            },
         ]
 
     def tearDown(self):
