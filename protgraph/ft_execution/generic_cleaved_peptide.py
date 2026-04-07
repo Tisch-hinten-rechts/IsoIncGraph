@@ -24,7 +24,7 @@ def execute_chain(graph, chain_feature):
     # TODO
     execute_generic_cleaved_peptide(graph, chain_feature)
 
-
+#currently only for canonical sequence, other isoforms are not considered in the isoforms attribute
 def execute_generic_cleaved_peptide(graph, generic_cleaved_feature):
     """
     This function adds ONLY edges to cleave the propeptide.
@@ -67,6 +67,8 @@ def execute_generic_cleaved_peptide(graph, generic_cleaved_feature):
     cur_edges = graph.ecount()
     graph.add_edges(edge_list)
     graph.es[cur_edges:]["qualifiers"] = edge_fts
+    graph.es[cur_edges:]["cleaved_feature"] = [generic_cleaved_feature.type] * len(edge_list)
+    graph.es[cur_edges:]["isoforms"] = ["canonical"] * len(edge_list)
 
 
 def _create_edges_list_and_feature(start_nodes, end_nodes, start_idx, stop_idx, feature):
@@ -86,7 +88,7 @@ def _create_edges_list_and_feature(start_nodes, end_nodes, start_idx, stop_idx, 
             edge_list.append((start_idx, sn.index))  # Add Ingoing edge from start
             edge_feature.append([feature])
             for ie in sn.in_edges():
-                if ie.source != start_idx:  # Check if ingoing node is start
+                if "canonical" in ie["isoforms"] and ie.source != start_idx:  # Check if ingoing node is start and if isoform is canonical
                     edge_list.append((ie.source, stop_idx))  # Add outgoing edge from all in-going nodes
                     edge_feature.append([*_get_qualifiers(ie), feature])
 
@@ -96,8 +98,9 @@ def _create_edges_list_and_feature(start_nodes, end_nodes, start_idx, stop_idx, 
             edge_list.append((en.index, stop_idx))  # Add Outgoing edge to end
             edge_feature.append([feature])
             for oe in en.out_edges():
-                if oe.target != stop_idx:  # Check if ingoing node is start
+                if "canonical" in oe["isoforms"] and oe.target != stop_idx:  # Check if ingoing node is start and if isoform is canonical
                     edge_list.append((start_idx, oe.target))  # Add outgoing edge from all in-going nodes
                     edge_feature.append([*_get_qualifiers(oe), feature])
 
+    #sABCDEFe is Graph, CD is ft, then the added edges are s-C B-e, D-e, s-E 
     return edge_list, edge_feature

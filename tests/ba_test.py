@@ -361,6 +361,34 @@ class FunctionalTest(unittest.TestCase):
                 "expected": "expected_JKXXSA.graphml",
                 "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
             },
+            {
+                "name": "Proptide",
+                "input_files": ["JKXXAG.txt"],
+                "output_file": "JKXXAG.graphml",
+                "expected": "expected_JKXXAG.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
+            },
+            {
+                "name": "Chain",
+                "input_files": ["JKXXAH.txt"],
+                "output_file": "JKXXAH.graphml",
+                "expected": "expected_JKXXAH.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
+            },
+            {
+                "name": "Peptide-Feature",
+                "input_files": ["JKXXAI.txt"],
+                "output_file": "JKXXAI.graphml",
+                "expected": "expected_JKXXAI.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
+            },
+            {
+                "name": "Propeptide-Isoforms",
+                "input_files": ["JKXXPI.txt"],
+                "output_file": "JKXXPI.graphml",
+                "expected": "expected_JKXXPI.graphml",
+                "extra_args": ["-egraphml", "--export_output_folder", cls.output_dir, "--digestion", "skip"],
+            },
         ]
 
     def tearDown(self):
