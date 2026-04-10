@@ -185,6 +185,7 @@ def _append_edge_list_missing(graph, text, generic_feature, edge_list, v_before,
     # Here we iterate over all possiblites over two pairs of nodes and its edges
     for aa_in_list, aa_out_list in zip(v_before, v_after):
         for aa_in in aa_in_list:
+            to_be_deleted = []
             for aa_edge_in in list(graph.es.select(_target=aa_in)):  # Get all incoming edges
                 #only want to continue paths that the affected isoforms actually travelled up to this point
                 matches = [isoform for isoform in affected_isoforms_list if isoform in (", " + aa_edge_in["isoforms"])] 
@@ -209,7 +210,8 @@ def _append_edge_list_missing(graph, text, generic_feature, edge_list, v_before,
                                 )
                                 #if affected_isoforms are the same as the incoming edge, the incoming edge would represent a wrong diverging to the canonical track and thus will be deleted
                                 if affected_isoforms == aa_edge_in["isoforms"]:
-                                    aa_edge_in.delete()
+                                    to_be_deleted.append(aa_edge_in)
+            graph.delete_edges(to_be_deleted)
 
 
 def _get_all_vertices_before_after(graph, aa_before: int, aa_after: int, reference: str):
